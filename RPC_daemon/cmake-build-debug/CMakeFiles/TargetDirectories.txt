@@ -1,0 +1,3 @@
+/home/theneonlightning/kis-2020-admission/RPC_daemon/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/theneonlightning/kis-2020-admission/RPC_daemon/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/theneonlightning/kis-2020-admission/RPC_daemon/cmake-build-debug/CMakeFiles/RPC_daemon.dir

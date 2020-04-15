@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/RPC_daemon.dir/main.cpp.o  -o RPC_daemon 
