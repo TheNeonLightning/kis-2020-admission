@@ -76,7 +76,7 @@ public:
             }
 
             write(fd, &syscall_result, sizeof(long));
-            
+
         }
     }
 
