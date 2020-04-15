@@ -1,3 +1,5 @@
+#include <string>
+#include <cstdio>
 #include <cstdint>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -6,7 +8,10 @@
 #include <fcntl.h>
 #include <sys/epoll.h>
 
+using std::string;
+
 const size_t MAX_PENDING_CALLS = SOMAXCONN;
+const size_t MAX_ARGUMENT_SIZE = 4096;
 
 class Server {
 public:
@@ -23,6 +28,8 @@ public:
         bind(server_socket, (const struct sockaddr*) &address, sizeof(address));
     }
 
+
+
     void ProcessCall(struct epoll_event* rp_call) {
 
         int fd = rp_call->data.fd;
@@ -35,8 +42,41 @@ public:
 
         } else {
 
+            int syscall_num = -1, syscall_args_num = -1;
+            long syscall_result = -1;
+
+            read(fd, &syscall_num, sizeof(int));
+            read(fd, &syscall_args_num, sizeof(int));
+
+             char arguments[syscall_args_num][MAX_ARGUMENT_SIZE];
 
 
+            for (size_t index = 0; index < syscall_args_num; ++index) {
+                read(fd, &arguments[index], MAX_ARGUMENT_SIZE);
+            }
+
+
+
+            switch (syscall_args_num) {
+                case 0:
+                    syscall_result = syscall(syscall_num);
+                    break;
+                case 1:
+                    syscall_result = syscall(syscall_num, arguments[0]);
+                    break;
+                case 2:
+                    syscall_result = syscall(syscall_num, arguments[0], arguments[1]);
+                    break;
+                case 3:
+                    syscall_result = syscall(syscall_num, arguments[0], arguments[1], arguments[2]);
+                    break;
+                case 4:
+                    syscall_result = syscall(syscall_num, arguments[0], arguments[1], arguments[2], arguments[3]);
+                    break;
+            }
+
+            write(fd, &syscall_result, sizeof(long));
+            
         }
     }
 
